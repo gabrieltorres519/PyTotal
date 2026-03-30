@@ -1,0 +1,8 @@
+Hola mundo
+aquí estoy
+cerando el texto
+HolamundoaquíestoyHola
+mundo
+aquí
+estoy
+Linea sin afectar lo escrito anteriormente en el archivo

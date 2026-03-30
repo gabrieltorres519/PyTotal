@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <h1>Lista de Pendientes</h1>
+        <a href='/crear-tarea'>Crear Nueva Tarea</a>
+
+        <table> 
+            <tr>
+                <th> Elementos </th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <!--  for tarea in object_list Por default object_list viene de views.py (clase ListaPendientes) referenciada en urls.py as_view pero podemos cambiarle el nombre--> 
+            {% for tarea in tareas %}  
+                <tr> 
+                    <td> {{tarea.titulo}} </td> 
+                    <td><a href="/tarea/{{tarea.id}}">Ver</a></td>
+                    <td><a href="/editar-tarea/{{tarea.id}}">Editar</a></td>
+                    <td><a href="/eliminar-tarea/{{tarea.id}}">Eliminar</a></td>
+                </tr>
+                {% empty %}
+                <h3> No hay elementos en la lista </h3>
+
+            {% endfor %} 
+
+        </table>
+        <script src="" async defer></script>
+    </body>
+</html>
