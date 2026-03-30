@@ -13,9 +13,23 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
+        {% if request.user.is_authenticated %}
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
+             
+            <p>{{request.user}}</p> <!-- request es una variable global en los sitios Django para sus plantillas -->
+            {% comment %} <a href="{% url 'logout'%}">Salir</a> {% endcomment %}
+            {% comment %} Al usar la clase LogoutView en urls.py y no la función logout de Django, se necesita de un formulario con método POST {% endcomment %}
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Salir</button>
+            </form>
+        {%else%}
+            <a href='/login'>Ingresar</a>
+        {% endif %}
+        <hr>
+
         <h1>Lista de Pendientes</h1>
         <a href='/crear-tarea'>Crear Nueva Tarea</a>
 
