@@ -2,10 +2,13 @@ from django.shortcuts import render
 from django.views.generic.list import ListView
 from .models import Tarea
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin # Atributos de usuario y restricción del acceso a listas del sitio
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from django.shortcuts import redirect
 
 
 class Logueo(LoginView): # Al  igual que todas las clases de Django, LoginView viene con varios campos a llenar como variables
@@ -15,6 +18,24 @@ class Logueo(LoginView): # Al  igual que todas las clases de Django, LoginView v
 
     def get_success_url(self):
         return reverse_lazy('pendientes')
+
+
+class PaginaRegistro(FormView):
+    template_name = 'base/registro.html'
+    form_class = UserCreationForm
+    redirect_authenticated_user = True
+    success_url = reverse_lazy('pendientes')
+
+    def form_valid(self, form):
+        usuario = form.save()
+        if usuario is not None:
+            login(self.request, usuario)
+        return super(PaginaRegistro, self).form_valid(form)
+    
+    def get(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('pendientes')
+        return super(PaginaRegistro, self).get(*args, **kwargs)     
 
 # Todas las clases creadas para las diferentes vistas heredarán primero a LoginRequiredMixin para restringir su acceso
 
