@@ -3,6 +3,10 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+
+{% extends 'base/principal.html' %}
+
+{% block content %}
 <html>
     <head>
         <meta charset="utf-8">
@@ -33,10 +37,14 @@
         <h1>Lista de Pendientes {{ciudad}}</h1>
         <a href='/crear-tarea'>Crear Nueva Tarea</a>
 
+        <form method="GET">
+            <input type="text" name="area-buscar" value="{{valor_buscado}}">
+            <input type="submit" value="Buscar">
+        </form>
+
         <table> 
             <tr>
                 <th> Elementos </th>
-                <th></th>
                 <th></th>
                 <th></th>
             </tr>
@@ -44,7 +52,6 @@
             {% for tarea in tareas %}  
                 <tr> 
                     <td> {{tarea.titulo}} </td> 
-                    <td><a href="/tarea/{{tarea.id}}">Ver</a></td>
                     <td><a href="/editar-tarea/{{tarea.id}}">Editar</a></td>
                     <td><a href="/eliminar-tarea/{{tarea.id}}">Eliminar</a></td>
                 </tr>
@@ -57,3 +64,6 @@
         <script src="" async defer></script>
     </body>
 </html>
+{% endblock content %}
+
+

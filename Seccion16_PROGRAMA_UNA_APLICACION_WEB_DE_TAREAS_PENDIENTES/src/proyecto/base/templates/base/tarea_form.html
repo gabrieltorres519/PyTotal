@@ -1,3 +1,6 @@
+{% extends 'base/principal.html' %}
+
+{% block content %}
 <h1> Formulario de tareas </h1>
 <a href="{% url 'pendientes' %}">Volver</a>
 
@@ -5,4 +8,6 @@
     {% csrf_token %}
     {{form.as_p}}
     <input type="submit" value="Enviar">  
-</form>
+</form>   
+{% endblock content %}
+

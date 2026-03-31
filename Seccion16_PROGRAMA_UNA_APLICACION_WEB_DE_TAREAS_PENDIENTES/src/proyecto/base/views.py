@@ -43,10 +43,15 @@ class ListaPendientes(LoginRequiredMixin, ListView): # Al heredar de la clase Li
     model = Tarea # Modelo/Tabla de la que se tomarán  los registros (trae todos los registros en automático)
     context_object_name = 'tareas' # Cambiamos el nombre para que en los templates los registros no lleguen como object_list por default
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs): # Filtros
         context = super().get_context_data(**kwargs)
         context['tareas'] = context['tareas'].filter(usuario=self.request.user) # 1er paso: Listado de tareas asociado al usuario logueado
         context['count'] = context['tareas'].filter(completo=False).count() # 2do paso: Conteo de tareas no completadas
+
+        valor_buscado = self.request.GET.get('area-buscar') or ''
+        if valor_buscado:
+            context['tareas'] = context['tareas'].filter(titulo__icontains=valor_buscado)
+        context['valor_buscado'] = valor_buscado
         return context
 
 class DetalleTarea(LoginRequiredMixin,DetailView):# tarea_detail.html porque es el nombre que se va a generar automáticamente para las vistas de detalle de la clase DetailView (se puede cambiar esta configuración)
