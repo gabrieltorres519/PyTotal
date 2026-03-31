@@ -22,6 +22,11 @@ class ListaPendientes(LoginRequiredMixin, ListView): # Al heredar de la clase Li
     model = Tarea # Modelo/Tabla de la que se tomarán  los registros (trae todos los registros en automático)
     context_object_name = 'tareas' # Cambiamos el nombre para que en los templates los registros no lleguen como object_list por default
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tareas'] = context['tareas'].filter(usuario=self.request.user) # 1er paso: Listado de tareas asociado al usuario logueado
+        context['count'] = context['tareas'].filter(completo=False).count() # 2do paso: Conteo de tareas no completadas
+        return context
 
 class DetalleTarea(LoginRequiredMixin,DetailView):# tarea_detail.html porque es el nombre que se va a generar automáticamente para las vistas de detalle de la clase DetailView (se puede cambiar esta configuración)
     model = Tarea # Al traer todos los registros en automático, desde el html el objeto '{{object}}' muestra el registro en la bd según se reciba una PK desde la url
@@ -34,13 +39,18 @@ class DetalleTarea(LoginRequiredMixin,DetailView):# tarea_detail.html porque es 
 class CrearTarea(LoginRequiredMixin,CreateView):  # La clase CreateView automáticamente busca el sufijo _form.html
     model = Tarea 
     # La clase CreateView ya toma el modelo o tabla y lo convierte en un objeto formulario
-    fields = '__all__'
+    fields = ['titulo','descripcion','completo']
     success_url = reverse_lazy('pendientes') # Redireccionando al home (name en las urls)
+
+    def form_valid(self, form): # Sobreescritura del método de la clase CreateView (formulario)
+        form.instance.usuario = self.request.user # Llenar el campo de usuario con el usuario logueado por default
+        return super(CrearTarea, self).form_valid(form) # Devolver los cambios     
+    
 
 
 class EditarTarea(LoginRequiredMixin,UpdateView):
     model = Tarea
-    fields = '__all__'
+    fields = ['titulo','descripcion','completo'] # Evitando que el campo de usuario sea editable
     success_url = reverse_lazy('pendientes')
 
 
